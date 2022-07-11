@@ -3,8 +3,13 @@ from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import random
+import sys
+
+sys.path.append('C:/Users/Oluchukwu Okoh/Desktop/ALX/API Development and Documentation/TriviaAPI-project/backend')
+
 
 from models import *
+
 
 QUESTIONS_PER_PAGE = 10
 
