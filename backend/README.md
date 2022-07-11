@@ -113,7 +113,7 @@ python test_flaskr.py
 
 Errors are returned as JSON objects in the following format:
 
-```jsko
+```json
 {
     "success": False,
     "error": 400,
@@ -125,7 +125,7 @@ The API will return three error types when requests fail:
 
 - 400: Bad Request
 - 404: Resource Not Found
-- 422: Not Processable
+- 422: Unprocessable
 
 ### Endpoints
 
@@ -137,7 +137,8 @@ The API will return three error types when requests fail:
   - Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1.
 - Sample: `curl http://127.0.0.1:5000/questions`
 
-```{
+``` json
+{
   "categories": {
    "1": "Science",
    "2": "Art",
@@ -145,7 +146,7 @@ The API will return three error types when requests fail:
    "4": "History",
    "5": "Entertainment",
    "6": "Sports"
- },
+   }
  "current_category": null,
  "questions": [
     {
@@ -230,7 +231,7 @@ The API will return three error types when requests fail:
 - Request Arguments: None
 - Returns: An object with a single key, `categories`, that contains an object of `id: category_string` key: value pairs.
 
-````json
+```json
 {
   "1": "Science",
   "2": "Art",
@@ -240,46 +241,39 @@ The API will return three error types when requests fail:
   "6": "Sports"
 }
 ```
+
 #### GET /categories/{category_id}/questions
+
 - General
   - requests argument: category_id:int
   - gets all questions in the specified category and returns the questions in the specified category, success value, total number of questions in the specified category.
-  - `curl http://127.0.0.1:5000/categories/3/questions `
-  ```
+- `curl http://127.0.0.1:5000/categories/6/questions `
+
+```json
   {
   "questions": [
     {
-      "answer": "Lake Victoria",
-      "category": 3,
-      "difficulty": 2,
-      "id": 13,
-      "question": "What is the largest lake in Africa?"
-    },
-    {
-      "answer": "The Palace of Versailles",
-      "category": 3,
+      "answer": "Brazil",
+      "category": 6,
       "difficulty": 3,
-      "id": 14,
-      "question": "In which royal palace would you find the Hall of Mirrors?"
-    },
-    {
-      "answer": "Agra",
-      "category": 3,
-      "difficulty": 2,
-      "id": 15,
-      "question": "The Taj Mahal is located in which Indian city?"
+      "id": 10,
+      "question": "Which is the only team to play in every soccer World Cup tournament?"
     }
   ],
   "success": true,
-  "total_questions": 3
+  "total_questions": 1
 }
-  ```
+```
+
+
 #### POST /quizzes
+
 - General:
     - fetches one random question within a specified category. Previously asked questions are not asked again
     - request body: (previous_questions: arr, quiz_category: {id:int, type:string})
     `curl -X POST http://127.0.0.1:5000/quizzes-H "Content-Type: application/json" -d '{"previous_questions":"arr","quiz_category": {"id":"1", "type":"string"}}`
-  ```
+
+```json
   {
   "question": {
     "answer": "The Liver",
@@ -290,46 +284,51 @@ The API will return three error types when requests fail:
   },
   "success": true
 }
-  ```
+```
+
+
 #### POST /create
+
 - General:
     - request body: (question, answer, category, diificulty.)
     - Creates a new questions using the submitted title, author and rating. Returns the id of the created questions, success value, total questions, and questions list based on current page number to update the frontend.
-- `curl -X POST http://127.0.0.1:5000/create  -H "Content-Type: application/json" -d '{"question":"Where is mountain Kilimanjaro located?", "answer":"Africa","category": "3", "difficulty":"2"}`
+`curl -X POST http://127.0.0.1:5000/create  -H "Content-Type: application/json" -d '{"question":"In which royal palace would you find the Hall of Mirrors?", "answer":"The Palace of Versailles","category": "3", "difficulty":"3"}`
 
-```{
+``` json
+{
   "questions": [
     {
-      "answer": "Africa",
+      "answer": "The Palace of Versailles",
       "category": 3,
       "difficulty": 3,
       "id": 19,
-      "question": "Where is mountain Kilimanjaro located?"
+      "question": "In which royal palace would you find the Hall of Mirrors?"
     }
   ],
   "created": 24,
   "success": true,
-  "total_questions": 17
+  "total_questions": 20
 }
-````
+```
+
 
 #### POST /search
 
 -General:
 
 - Request body: searchTerm
-  -Searches through the questions in the database for the given keywords. returns a list of all available questions which has the keyword, success value, and total number of questions gotten from the search. -`curl -X POST http://127.0.0.1:5000/search -H "Content-Type: application/json" -d '{"searchTerm":"Kilimanjaro"}`
+  -Searches through the questions in the database for the given keywords. returns a list of all available questions which has the keyword, success value, and total number of questions gotten from the search. -`curl -X POST http://127.0.0.1:5000/search -H "Content-Type: application/json" -d '{"searchTerm":"Mirrors"}`
 
-```
+```json
 {
   "questions": [
     {
-    "answer": "Africa",
-    "category": 3,
-    "difficulty": 3,
-    "id": 19,
-    "question": "Where is mountain Kilimanjaro located?"
-  }
+      "answer": "The Palace of Versailles",
+      "category": 3,
+      "difficulty": 3,
+      "id": 14,
+      "question": "In which royal palace would you find the Hall of Mirrors?"
+    }
   ],
 
 "success": true,
@@ -344,23 +343,25 @@ The API will return three error types when requests fail:
   - Deletes the questions of the given ID if it exists. Returns the id of the deleted questions, success value, total questions, and questions list based on current page number to update the frontend.
 - `curl -X DELETE http://127.0.0.1:5000/questions/5?page=1`
 
-```
+``` json
 {
   "questions": [
 
   ],
   "deleted": 5,
   "success": true,
-  "total_questions": 15
+  "total_questions": 19
 }
 ```
 
-## Deployment N/A
+### Deployment N/A
+```....coming soon```
 
 ## Authors
 
-Yours truly, Nasredeen Abdulhaleem
+Kachukwu Okoh
+
 
 ## Acknowledgements
 
-The tutors at Udacity
+Tutors at Udacity
