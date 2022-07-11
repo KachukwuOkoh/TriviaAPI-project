@@ -102,3 +102,232 @@ createdb trivia_test
 psql trivia_test < trivia.psql
 python test_flaskr.py
 ```
+
+Getting Started
+Base URL: At present this app can only be run locally and is not hosted as a base URL. The backend app is hosted at the default, http://127.0.0.1:5000/, which is set as a proxy in the frontend configuration.
+Authentication: This version of the application does not require authentication or API keys.
+Error Handling
+Errors are returned as JSON objects in the following format:
+
+{
+    "success": False,
+    "error": 400,
+    "message": "bad request"
+}
+The API will return three error types when requests fail:
+
+400: Bad Request
+404: Resource Not Found
+422: Not Processable
+Endpoints
+GET /questions
+General:
+Request parameters (optional): page:int
+Returns a list of questions and categories
+Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1.
+Sample: curl http://127.0.0.1:5000/questions
+  "categories": {
+   "1": "Science",
+   "2": "Art",
+   "3": "Geography",
+   "4": "History",
+   "5": "Entertainment",
+   "6": "Sports"
+ },
+ "current_category": null,
+ "questions": [
+    {
+      "answer": "Apollo 13",
+      "category": 5,
+      "difficulty": 4,
+      "id": 2,
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    },
+    {
+      "answer": "Tom Cruise",
+      "category": 5,
+      "difficulty": 4,
+      "id": 4,
+      "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+    },
+    {
+      "answer": "Maya Angelou",
+      "category": 4,
+      "difficulty": 2,
+      "id": 5,
+      "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+    },
+    {
+      "answer": "Edward Scissorhands",
+      "category": 5,
+      "difficulty": 3,
+      "id": 6,
+      "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+    },
+    {
+      "answer": "Muhammad Ali",
+      "category": 4,
+      "difficulty": 1,
+      "id": 9,
+      "question": "What boxer's original name is Cassius Clay?"
+    },
+    {
+      "answer": "Brazil",
+      "category": 6,
+      "difficulty": 3,
+      "id": 10,
+      "question": "Which is the only team to play in every soccer World Cup tournament?"
+    },
+    {
+      "answer": "George Washington Carver",
+      "category": 4,
+      "difficulty": 2,
+      "id": 12,
+      "question": "Who invented Peanut Butter?"
+    },
+    {
+      "answer": "Lake Victoria",
+      "category": 3,
+      "difficulty": 2,
+      "id": 13,
+      "question": "What is the largest lake in Africa?"
+    },
+    {
+      "answer": "The Palace of Versailles",
+      "category": 3,
+      "difficulty": 3,
+      "id": 14,
+      "question": "In which royal palace would you find the Hall of Mirrors?"
+    },
+    {
+      "answer": "Agra",
+      "category": 3,
+      "difficulty": 2,
+      "id": 15,
+      "question": "The Taj Mahal is located in which Indian city?"
+    }
+  ],
+  "success": true,
+  "total_questions": 18
+}
+GET /categories
+Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
+Request Arguments: None
+Returns: An object with a single key, categories, that contains an object of id: category_string key: value pairs.
+{
+  "1": "Science",
+  "2": "Art",
+  "3": "Geography",
+  "4": "History",
+  "5": "Entertainment",
+  "6": "Sports"
+}
+```
+#### GET /categories/{category_id}/questions
+- General
+  - requests argument: category_id:int
+  - gets all questions in the specified category and returns the questions in the specified category, success value, total number of questions in the specified category.
+  - `curl http://127.0.0.1:5000/categories/3/questions `
+  ```
+  {
+  "questions": [
+    {
+      "answer": "Lake Victoria",
+      "category": 3,
+      "difficulty": 2,
+      "id": 13,
+      "question": "What is the largest lake in Africa?"
+    },
+    {
+      "answer": "The Palace of Versailles",
+      "category": 3,
+      "difficulty": 3,
+      "id": 14,
+      "question": "In which royal palace would you find the Hall of Mirrors?"
+    },
+    {
+      "answer": "Agra",
+      "category": 3,
+      "difficulty": 2,
+      "id": 15,
+      "question": "The Taj Mahal is located in which Indian city?"
+    }
+  ],
+  "success": true,
+  "total_questions": 3
+}
+  ```
+#### POST /quizzes
+- General:
+    - fetches one random question within a specified category. Previously asked questions are not asked again
+    - request body: (previous_questions: arr, quiz_category: {id:int, type:string})
+    `curl -X POST http://127.0.0.1:5000/quizzes-H "Content-Type: application/json" -d '{"previous_questions":"arr","quiz_category": {"id":"1", "type":"string"}}`
+  ```
+  {
+  "question": {
+    "answer": "The Liver",
+    "category": 1,
+    "difficulty": 4,
+    "id": 20,
+    "question": "What is the heaviest organ in the human body?"
+  },
+  "success": true
+}
+  ```
+#### POST /create
+- General:
+    - request body: (question, answer, category, diificulty.)
+    - Creates a new questions using the submitted title, author and rating. Returns the id of the created questions, success value, total questions, and questions list based on current page number to update the frontend.
+- `curl -X POST http://127.0.0.1:5000/create  -H "Content-Type: application/json" -d '{"question":"Where is mountain Kilimanjaro located?", "answer":"Africa","category": "3", "difficulty":"2"}`
+
+```{
+  "questions": [
+    {
+      "answer": "Africa",
+      "category": 3,
+      "difficulty": 3,
+      "id": 19,
+      "question": "Where is mountain Kilimanjaro located?"
+    }
+  ],
+  "created": 24,
+  "success": true,
+  "total_questions": 17
+}
+POST /search
+-General:
+
+Request body: searchTerm -Searches through the questions in the database for the given keywords. returns a list of all available questions which has the keyword, success value, and total number of questions gotten from the search. -curl -X POST http://127.0.0.1:5000/search -H "Content-Type: application/json" -d '{"searchTerm":"Kilimanjaro"}
+{
+  "questions": [
+    {
+    "answer": "Africa",
+    "category": 3,
+    "difficulty": 3,
+    "id": 19,
+    "question": "Where is mountain Kilimanjaro located?"
+  }
+  ],
+
+"success": true,
+"total_questions": 1
+}
+DELETE /question/{question_id}
+General:
+request arguments: question_id:int
+Deletes the questions of the given ID if it exists. Returns the id of the deleted questions, success value, total questions, and questions list based on current page number to update the frontend.
+curl -X DELETE http://127.0.0.1:5000/questions/5?page=1
+{
+  "questions": [
+
+  ],
+  "deleted": 5,
+  "success": true,
+  "total_questions": 15
+}
+Deployment N/A
+Authors
+Yours truly, Nasredeen Abdulhaleem
+
+Acknowledgements
+The tutors at Udacity
