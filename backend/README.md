@@ -103,29 +103,41 @@ psql trivia_test < trivia.psql
 python test_flaskr.py
 ```
 
-Getting Started
-Base URL: At present this app can only be run locally and is not hosted as a base URL. The backend app is hosted at the default, http://127.0.0.1:5000/, which is set as a proxy in the frontend configuration.
-Authentication: This version of the application does not require authentication or API keys.
-Error Handling
+
+### Getting Started
+
+- Base URL: At present this app can only be run locally and is not hosted as a base URL. The backend app is hosted at the default, `http://127.0.0.1:5000/`, which is set as a proxy in the frontend configuration.
+- Authentication: This version of the application does not require authentication or API keys.
+
+### Error Handling
+
 Errors are returned as JSON objects in the following format:
 
+```jsko
 {
     "success": False,
     "error": 400,
     "message": "bad request"
 }
+```
+
 The API will return three error types when requests fail:
 
-400: Bad Request
-404: Resource Not Found
-422: Not Processable
-Endpoints
-GET /questions
-General:
-Request parameters (optional): page:int
-Returns a list of questions and categories
-Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1.
-Sample: curl http://127.0.0.1:5000/questions
+- 400: Bad Request
+- 404: Resource Not Found
+- 422: Not Processable
+
+### Endpoints
+
+#### GET /questions
+
+- General:
+  - Request parameters (optional): page:int
+  - Returns a list of questions and categories
+  - Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1.
+- Sample: `curl http://127.0.0.1:5000/questions`
+
+```{
   "categories": {
    "1": "Science",
    "2": "Art",
@@ -210,10 +222,15 @@ Sample: curl http://127.0.0.1:5000/questions
   "success": true,
   "total_questions": 18
 }
-GET /categories
-Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
-Request Arguments: None
-Returns: An object with a single key, categories, that contains an object of id: category_string key: value pairs.
+```
+
+#### GET /categories
+
+- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
+- Request Arguments: None
+- Returns: An object with a single key, `categories`, that contains an object of `id: category_string` key: value pairs.
+
+````json
 {
   "1": "Science",
   "2": "Art",
@@ -294,10 +311,16 @@ Returns: An object with a single key, categories, that contains an object of id:
   "success": true,
   "total_questions": 17
 }
-POST /search
+````
+
+#### POST /search
+
 -General:
 
-Request body: searchTerm -Searches through the questions in the database for the given keywords. returns a list of all available questions which has the keyword, success value, and total number of questions gotten from the search. -curl -X POST http://127.0.0.1:5000/search -H "Content-Type: application/json" -d '{"searchTerm":"Kilimanjaro"}
+- Request body: searchTerm
+  -Searches through the questions in the database for the given keywords. returns a list of all available questions which has the keyword, success value, and total number of questions gotten from the search. -`curl -X POST http://127.0.0.1:5000/search -H "Content-Type: application/json" -d '{"searchTerm":"Kilimanjaro"}`
+
+```
 {
   "questions": [
     {
@@ -312,11 +335,16 @@ Request body: searchTerm -Searches through the questions in the database for the
 "success": true,
 "total_questions": 1
 }
-DELETE /question/{question_id}
-General:
-request arguments: question_id:int
-Deletes the questions of the given ID if it exists. Returns the id of the deleted questions, success value, total questions, and questions list based on current page number to update the frontend.
-curl -X DELETE http://127.0.0.1:5000/questions/5?page=1
+```
+
+#### DELETE /question/{question_id}
+
+- General:
+  - request arguments: question_id:int
+  - Deletes the questions of the given ID if it exists. Returns the id of the deleted questions, success value, total questions, and questions list based on current page number to update the frontend.
+- `curl -X DELETE http://127.0.0.1:5000/questions/5?page=1`
+
+```
 {
   "questions": [
 
@@ -325,9 +353,14 @@ curl -X DELETE http://127.0.0.1:5000/questions/5?page=1
   "success": true,
   "total_questions": 15
 }
-Deployment N/A
-Authors
+```
+
+## Deployment N/A
+
+## Authors
+
 Yours truly, Nasredeen Abdulhaleem
 
-Acknowledgements
+## Acknowledgements
+
 The tutors at Udacity
